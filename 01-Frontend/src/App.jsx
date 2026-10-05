@@ -15,19 +15,23 @@ function App() {
 
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-  return (
-    <div>
-      <h1>AI Expense Manager</h1>
-      <AddExpenseForm onAdd={handleAdd} />
-      <h2>Total: ₹{total}</h2>
-      {expenses.map((expense) => (
-        <ExpenseCard
-          key={expense.id}
-          title={expense.title}
-          amount={expense.amount}
-          category={expense.category}
-        />
-      ))}
+      return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="mx-auto max-w-xl space-y-4">
+        <h1 className="text-3xl font-bold text-indigo-600">
+          AI Expense Manager
+        </h1>
+        <AddExpenseForm onAdd={handleAdd} />
+        <h2 className="text-xl font-semibold text-gray-700">Total: ₹{total}</h2>
+        {expenses.map((expense) => (
+          <ExpenseCard
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            category={expense.category}
+          />
+        ))}
+      </div>
     </div>
   );
 }
