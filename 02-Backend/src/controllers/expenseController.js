@@ -1,26 +1,47 @@
-let expenses = [
-  { id: 1, title: "Pizza", amount: 450, category: "Food" },
-  { id: 2, title: "Bus pass", amount: 800, category: "Transportation" },
-];
+import Transaction from "../../../03-Database/models/Transaction.js";
 
-export const getExpenses = (req, res) => {
-  res.json(expenses);
+export const getExpenses = async (req, res) => {
+  try {
+    const expenses = await Transaction.find({ type: "expense" }).sort({
+      createdAt: -1,
+    });
+    res.json(expenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-export const addExpense = (req, res) => {
-  const { title, amount, category } = req.body;
+export const addExpense = async (req, res) => {
+  try {
+    const { title, amount, category } = req.body;
 
-  if (!title || !amount) {
-    return res.status(400).json({ message: "Title and amount are required" });
+    if (!title || !amount) {
+      return res.status(400).json({ message: "Title and amount are required" });
+    }
+
+    const expense = await Transaction.create({
+      title,
+      amount: Number(amount),
+      category,
+      type: "expense",
+    });
+
+    res.status(201).json(expense);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
+};
 
-  const newExpense = {
-    id: Date.now(),
-    title,
-    amount: Number(amount),
-    category: category || "Other",
-  };
+export const deleteExpense = async (req, res) => {
+  try {
+    const expense = await Transaction.findByIdAndDelete(req.params.id);
 
-  expenses.unshift(newExpense);
-  res.status(201).json(newExpense);
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+
+    res.json({ message: "Expense deleted" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
