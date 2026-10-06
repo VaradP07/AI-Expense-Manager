@@ -5,17 +5,17 @@ function AddExpenseForm({ onAdd }) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Food");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!title || !amount) return;
 
-    onAdd({ id: Date.now(), title, amount: Number(amount), category });
+    await onAdd({ title, amount: Number(amount), category });
 
     setTitle("");
     setAmount("");
   };
 
-    return (
+  return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-wrap gap-2 rounded-lg bg-white p-4 shadow"

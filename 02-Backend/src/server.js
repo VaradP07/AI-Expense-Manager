@@ -2,9 +2,12 @@ import "dotenv/config";
 import express from "express";
 import connectDB from "../../03-Database/config/connectDB.js";
 import expenseRoutes from "./routes/expenseRoutes.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174"] }));
 
 app.use(express.json());
 
